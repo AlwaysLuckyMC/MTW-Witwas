@@ -1,0 +1,37 @@
+npc:
+  name: "Witwasser"
+
+npc-location:
+  world: world
+  x: 100.5
+  y: 64
+  z: 200.5
+
+launder-locations:
+  - "world,105.5,64,210.5"
+  - "world,95.5,64,195.5"
+  - "world,120.5,64,180.5"
+
+alert-chance: 30 # procent
+launder-radius: 5
+launder-delay: 10 # seconden
+
+items:
+  dirty-money:
+    name: "&cDirty Money"
+    lore:
+      - "&7Illegaal verkregen geld"
+    material: PAPER
+
+  clean-money:
+    name: "&aClean Money"
+    lore:
+      - "&7Witgewassen geld"
+    material: PAPER
+
+messages:
+  no-dirty-money: "&cJe hebt geen dirty money in je hand."
+  go-to-location: "&aGa naar deze locatie om te witwassen: %x%, %y%, %z%"
+  not-close-enough: "&cJe bent niet op de juiste locatie!"
+  success: "&aJe hebt succesvol je geld witgewassen!"
+  alert: "Verdachte witwasactiviteit bij %location%"

@@ -1,0 +1,8 @@
+name: MTW-Witwas
+version: '${project.version}'
+main: nl.alwayslucky.mtwwitwas.Main
+softdepend: [Citizens]
+commands:
+  witwas:
+    usage: /witwas give <dirty|clean>
+    description: Geef jezelf een money item
