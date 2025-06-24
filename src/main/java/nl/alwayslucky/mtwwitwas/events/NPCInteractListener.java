@@ -11,11 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
+
+import java.util.List;
 
 public class NPCInteractListener implements Listener {
 
     @EventHandler
     public void onNPCClick(PlayerInteractEntityEvent event){
+        if (event.getHand() != EquipmentSlot.HAND) return;
+
         Player player = event.getPlayer();
         Entity clicked = event.getRightClicked();
 
@@ -23,7 +28,6 @@ public class NPCInteractListener implements Listener {
 
         NPC npc = CitizensAPI.getNPCRegistry().getNPC(clicked);
 
-        // Haal veilig de config via singleton
         String configName = Main.getInstance().getConfig().getString("npc.name");
 
         if (configName == null) {
@@ -32,9 +36,14 @@ public class NPCInteractListener implements Listener {
         }
 
         if (npc.getName().equalsIgnoreCase(configName)) {
-            Location npcLoc = LocationUtils.getNPCLocation();
-            if (clicked.getLocation().distance(npcLoc) < 2) {
-                LaunderManager.startLaundering(player);
+            List<Location> npcLocaties = LocationUtils.getNPCLocations();
+
+            for (Location npcLoc : npcLocaties) {
+                if (clicked.getLocation().getWorld().equals(npcLoc.getWorld()) &&
+                        clicked.getLocation().distance(npcLoc) < 2) {
+                    LaunderManager.startLaundering(player);
+                    break;
+                }
             }
         }
     }

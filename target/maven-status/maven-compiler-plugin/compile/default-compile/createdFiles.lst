@@ -1,6 +1,10 @@
+nl\alwayslucky\mtwwitwas\managers\LaunderManager$1.class
 nl\alwayslucky\mtwwitwas\commands\WitWas.class
 nl\alwayslucky\mtwwitwas\events\NPCInteractListener.class
 nl\alwayslucky\mtwwitwas\utils\LocationUtils.class
 nl\alwayslucky\mtwwitwas\utils\ItemUtils.class
+nl\alwayslucky\mtwwitwas\gui\LocationsGUI.class
+nl\alwayslucky\mtwwitwas\gui\WitwasLocGUI.class
 nl\alwayslucky\mtwwitwas\managers\LaunderManager.class
+nl\alwayslucky\mtwwitwas\gui\LaunderLocGUI.class
 nl\alwayslucky\mtwwitwas\Main.class

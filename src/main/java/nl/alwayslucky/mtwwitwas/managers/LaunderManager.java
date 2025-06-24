@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
@@ -36,25 +37,45 @@ public class LaunderManager {
                         .replace("%z%", String.valueOf(target.getBlockZ()))
         ));
 
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
-            double radius = config.getDouble("launder-radius");
+        Location targetLocation = target.clone();
 
-            if (player.getLocation().distance(target) < radius) {
-                player.getInventory().addItem(ItemUtils.getConfiguredItem("items.clean-money"));
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        config.getString("messages.success")));
+        long delayInSeconds = config.getLong("launder-delay");
+        double radius = config.getDouble("launder-radius");
 
-                if (new Random().nextInt(100) < config.getInt("alert-chance")) {
-                    String msg = config.getString("messages.alert")
-                            .replace("%location%", LocationUtils.format(player.getLocation()));
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "112 " + msg);
+        long[] timeLeft = {delayInSeconds}; 
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!player.isOnline()) {
+                    cancel();
+                    return;
                 }
 
-            } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        config.getString("messages.not-close-enough")));
-            }
+                if (player.getLocation().distance(targetLocation) <= radius) {
+                    player.getInventory().addItem(ItemUtils.getConfiguredItem("items.clean-money"));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            config.getString("messages.success")));
 
-        }, config.getLong("launder-delay") * 20L);
+                    if (new Random().nextInt(100) < config.getInt("alert-chance")) {
+                        String msg = config.getString("messages.alert")
+                                .replace("%location%", LocationUtils.format(player.getLocation()));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "112 " + msg);
+                    }
+
+                    cancel();
+                    return;
+                }
+
+                timeLeft[0]--;
+
+                if (timeLeft[0] <= 0) {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            config.getString("messages.not-close-enough")));
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(Main.getInstance(), 0L, 20L);
     }
 }
