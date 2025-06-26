@@ -19,7 +19,7 @@ public class LaunderManager {
         FileConfiguration config = Main.getInstance().getConfig();
 
         ItemStack inHand = player.getInventory().getItemInMainHand();
-        ItemStack dirtyItem = ItemUtils.getConfiguredItem("items.dirty-money");
+        ItemStack dirtyItem = ItemUtils.getConfiguredItem("witwassen.items.dirty-money");
 
         if (!ItemUtils.isSimilar(inHand, dirtyItem)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -39,10 +39,10 @@ public class LaunderManager {
 
         Location targetLocation = target.clone();
 
-        long delayInSeconds = config.getLong("launder-delay");
-        double radius = config.getDouble("launder-radius");
+        long delayInSeconds = config.getLong("witwassen.launder-delay");
+        double radius = config.getDouble("witwassen.launder-radius");
 
-        long[] timeLeft = {delayInSeconds}; 
+        long[] timeLeft = {delayInSeconds};
 
         new BukkitRunnable() {
             @Override
@@ -53,11 +53,11 @@ public class LaunderManager {
                 }
 
                 if (player.getLocation().distance(targetLocation) <= radius) {
-                    player.getInventory().addItem(ItemUtils.getConfiguredItem("items.clean-money"));
+                    player.getInventory().addItem(ItemUtils.getConfiguredItem("witwassen.items.clean-money"));
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             config.getString("messages.success")));
 
-                    if (new Random().nextInt(100) < config.getInt("alert-chance")) {
+                    if (new Random().nextInt(100) < config.getInt("witwassen.alert-chance")) {
                         String msg = config.getString("messages.alert")
                                 .replace("%location%", LocationUtils.format(player.getLocation()));
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "112 " + msg);

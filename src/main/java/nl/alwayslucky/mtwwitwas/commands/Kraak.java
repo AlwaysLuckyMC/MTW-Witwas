@@ -4,6 +4,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import nl.alwayslucky.mtwwitwas.Main;
 import nl.alwayslucky.mtwwitwas.gui.KraakGUI;
+import nl.alwayslucky.mtwwitwas.gui.KraakLocationsGUI;
 import nl.alwayslucky.mtwwitwas.gui.LocationsGUI;
 import nl.alwayslucky.mtwwitwas.utils.ItemUtils;
 import nl.alwayslucky.mtwwitwas.utils.LocationUtils;
@@ -16,7 +17,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class WitWas implements CommandExecutor {
+public class Kraak implements CommandExecutor {
 
     FileConfiguration config = Main.getInstance().getConfig();
 
@@ -28,39 +29,26 @@ public class WitWas implements CommandExecutor {
         }
 
         if(args.length == 0) {
-            sender.sendMessage("§cGebruik: /witwas <give | locations | add-launder | spawn-npc>");
+            sender.sendMessage("§cGebruik: /kraak <locations | add-location | spawn-npc>");
             return true;
         }
 
         Player player = (Player) sender;
 
-        if (args[0].equalsIgnoreCase("give")) {
-            if(args.length == 2){
-                String type = args[1].toLowerCase();
-                if (type.equals("dirty")) {
-                    player.getInventory().addItem(ItemUtils.getConfiguredItem("witwassen.items.dirty-money"));
-                } else if (type.equals("clean")) {
-                    player.getInventory().addItem(ItemUtils.getConfiguredItem("witwassen.items.clean-money"));
-                } else {
-                    player.sendMessage("§cGebruik: /witwas give <dirty | clean>");
-                }
-            }else {
-                player.sendMessage("§cGebruik: /witwas give <dirty | clean>");
-            }
-        } else if (args[0].equalsIgnoreCase("locations")) {
-            LocationsGUI.openMainMenu(player);
+        if (args[0].equalsIgnoreCase("locations")) {
+            KraakLocationsGUI.openMainMenu(player);
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.gui.open")));
-        }else if (args[0].equalsIgnoreCase("add-launder")) {
-            LocationUtils.addLaunderLocation(player.getLocation());
+        }else if (args[0].equalsIgnoreCase("add-location")) {
+            LocationUtils.addKraakLocation(player.getLocation());
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.gui.add-launder")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.gui.add-kraak")));
         }else if (args[0].equalsIgnoreCase("spawn-npc")) {
             Location newNPCloc = player.getLocation().clone();
 
             newNPCloc.setYaw(90);
             newNPCloc.setPitch(0f);
 
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Witwasser");
+            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Kraker");
 
             npc.spawn(newNPCloc);
             npc.data().setPersistent(NPC.Metadata.PLAYER_SKIN_UUID, "AlwaysLucky_");
@@ -68,11 +56,11 @@ public class WitWas implements CommandExecutor {
 
             npc.faceLocation(newNPCloc);
 
-            LocationUtils.addNPCLocation(newNPCloc);
+            LocationUtils.addKraakNPCLocation(newNPCloc);
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.gui.spawn-npc")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.kraak.spawn-npc")));
         }else if (args[0].equalsIgnoreCase("kraak")) {
-            player.sendMessage("§cHet kraakmenu word geopend...");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("messages.kraak.start")));
             KraakGUI.openMainMenu(player);
         }else{
             player.sendMessage("§cGebruik: /witwas <give | locations | add-launder | spawn-npc>");

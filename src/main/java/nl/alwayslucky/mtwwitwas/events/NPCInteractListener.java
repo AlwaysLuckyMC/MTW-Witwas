@@ -3,6 +3,7 @@ package nl.alwayslucky.mtwwitwas.events;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import nl.alwayslucky.mtwwitwas.Main;
+import nl.alwayslucky.mtwwitwas.managers.KraakManager;
 import nl.alwayslucky.mtwwitwas.utils.LocationUtils;
 import nl.alwayslucky.mtwwitwas.managers.LaunderManager;
 import org.bukkit.Location;
@@ -28,7 +29,8 @@ public class NPCInteractListener implements Listener {
 
         NPC npc = CitizensAPI.getNPCRegistry().getNPC(clicked);
 
-        String configName = Main.getInstance().getConfig().getString("npc.name");
+        String configName = Main.getInstance().getConfig().getString("witwassen.npc.name");
+        String configKraakName = Main.getInstance().getConfig().getString("kraken.npc.name");
 
         if (configName == null) {
             player.sendMessage("§c[DEBUG] Config npc.name is niet ingesteld.");
@@ -45,6 +47,18 @@ public class NPCInteractListener implements Listener {
                     break;
                 }
             }
+        }else if (npc.getName().equalsIgnoreCase(configKraakName)) {
+            List<Location> npcLocaties = LocationUtils.getKraakNPCLocations();
+
+            for (Location npcLoc : npcLocaties) {
+                if (clicked.getLocation().getWorld().equals(npcLoc.getWorld()) &&
+                        clicked.getLocation().distance(npcLoc) < 2) {
+                    KraakManager.startLaundering(player);
+                    break;
+                }
+            }
+        }else {
+            return;
         }
     }
 }

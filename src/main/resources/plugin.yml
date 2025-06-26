@@ -4,5 +4,8 @@ main: nl.alwayslucky.mtwwitwas.Main
 softdepend: [Citizens]
 commands:
   witwas:
-    usage: /witwas give <dirty|clean>
+    usage: /witwas <give|locations|add-launder|spawn-npc> <dirty|clean>
     description: Geef jezelf een money item
+  kraak:
+    usage: /kraak <locations|add-location|spawn-npc>
+    description: Main command voor het opzetten van kraken
